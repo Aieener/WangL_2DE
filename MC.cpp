@@ -9,21 +9,7 @@
 */
 
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include "square.h"
-#include "cells.h"
 #include "MC.h"
-#include "hardrods.h"
-#include <cstdlib>
-#include <cmath>
-#include <time.h>
-#include <vector>
-#include "histogram.h"
-#include <array>
-using namespace std;
 
 
 MC::MC(long int ST, int LEN,int C, int R, double Z,double E)
@@ -440,19 +426,4 @@ void MC::plot(const vector<HR>& VRodlist, const vector<HR>& HRodlist)
 }
 
 
-
-int main()
-{
-	double start = clock();
-
-	// ======================= MCRUN & Plotting the final config ===============================
-	array<double,10000>  wf;
-	vector<HR> R;
-	MC m(1E8L,8,64,64,1,1);
-	wf = m.MCRUN();
-	// ======================= end of simulation, print out the time =======
-	double end = clock();
-	cout <<"This simulation takes "<< (double(end-start)/CLOCKS_PER_SEC)<<endl;
-	return 0;
-}
 

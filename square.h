@@ -6,8 +6,11 @@
 #ifndef SQUARE_H
 #define SQUARE_H
 
+#include <cstdlib>
 #include <iostream>
+#include <sstream>
 #include <string>
+using namespace std;
 
 class Square
 {

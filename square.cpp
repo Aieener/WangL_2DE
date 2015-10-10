@@ -3,12 +3,9 @@
 // Author: Yuding Ai
 // Date: 2015.06.05
 
-#include <iostream>
-#include <sstream>
-#include <string>
+
 #include "square.h"
-using namespace std;
-#include <cstdlib>
+
 
 /*!
 *  Constructor with 3 parameters
