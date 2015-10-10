@@ -33,6 +33,7 @@ MC::MC(long int ST, int LEN,int C, int R, double Z,double E)
 	length = LEN;
 	step = ST;
 	z = Z;
+	bepsilon = E;
 	nh=nv=dh=dv=ah=av=0;
 }
 
@@ -326,15 +327,15 @@ array<double,10000>  MC::MCRUN()
 		
 	srand(time(NULL));
 	long int i = 0;
-	Histogram histotal(0,1.0*V/K,4); // take 80% of the full range.
-	Histogram histotalacc(0,1.0*V/K,4); // take 80% of the full range. change it to 100 for gas
+	Histogram histotal(0,0.9*V/K,4); // take 80% of the full range.
+	Histogram histotalacc(0,0.9*V/K,4); // take 80% of the full range. change it to 100 for gas
 
 
 	// int av = 0; 
 	// int ah = 0; // an interger keep track of the times of we reset the histogram
 
 	// =============================================================Start MC runs ======================================================================== //
-	while (g>=1E-7)
+	while (g>=2E-7)
 	{
 		i++;
 		// generate a random probability to decide either add or del;
@@ -342,8 +343,8 @@ array<double,10000>  MC::MCRUN()
 		double size = nv+nh;
 		prob = ((double) rand() / (RAND_MAX)); 
 
-		aaccp = V/((size+1.0)*K)*(exp(WF[int(size+1)] - WF[int(size)]));
-		daccp = (size*K)/V*(exp(WF[int(size-1)] - WF[int(size)]));	
+		aaccp = z*V/((size+1.0)*K)*(exp(WF[int(size+1)] - WF[int(size)]));
+		daccp = (size*K)/(z*V)*(exp(WF[int(size-1)] - WF[int(size)]));	
 
 		// probd = min(1.0,daccp);
 		// proba = min(1.0,aaccp);
@@ -351,7 +352,7 @@ array<double,10000>  MC::MCRUN()
         // ===========================Addition ===================================
 		if(addordel == 0) 
 		{
-			if(size <= 1.0*V/K) // make sure does not go beyond the histogram
+			if(size <= 0.9*V/K) // make sure does not go beyond the histogram
 			{
 				//Do Addition;
 				Add(s,prob,aaccp);
@@ -390,13 +391,13 @@ array<double,10000>  MC::MCRUN()
 
 		if (i%100000 == 0) // print out result in the terminal
 		{
-			cout <<"g= "<<g<<"  Min = "<<hisvmin<<" Mean = "<< hisvmean <<" # of Ver Rod: "<<nv <<" # of Hor Rod: "<<nh <<  "      WF[0] = "<< WF[0]<<" WF[0.2*full#] = "<< WF[0.2*0.8*V/K]<<" WF[0.5*full#] = "<< WF[0.5*0.8*V/K]<<"  WF[0.7*full#] = "<< WF[0.7*0.8*V/K]<<endl;
+			cout <<"g= "<<g<<"  Min = "<<hisvmin<<" Mean = "<< hisvmean <<" # of Ver Rod: "<<nv <<" # of Hor Rod: "<<nh <<  "      WF[0] = "<< WF[0]<<" WF[0.2*full#] = "<< WF[0.2*0.9*V/K]<<" WF[0.5*full#] = "<< WF[0.5*0.9*V/K]<<"  WF[full#] = "<< WF[0.9*V/K]<<endl;
 			// cout <<"g= "<<g<<"  Min = "<<hisvmin<<" Mean = "<< hisvmean <<" # of Ver Rod: "<<nv <<" # of Hor Rod: "<<nh <<  "      WFV[0] = "<< WFV[0]<<" WFV[50] = "<< WFV[50]<<" WFV[70] = "<< WFV[70]<<"  WFV[100] = "<< WFV[100]<<endl;
 		}        	        
 	}
    
 
-	for(int i = 0; i< r*c+1; i++)
+	for(int i = 0; i< 0.9*V/K+1; i++)
 	{
 		sh<<WF[i]<<endl;
 	}
@@ -447,7 +448,7 @@ int main()
 	// ======================= MCRUN & Plotting the final config ===============================
 	array<double,10000>  wf;
 	vector<HR> R;
-	MC m(1E8L,1,30,30,exp(1.8*(-2.0)),1.8);
+	MC m(1E8L,8,64,64,1,1);
 	wf = m.MCRUN();
 	// ======================= end of simulation, print out the time =======
 	double end = clock();
